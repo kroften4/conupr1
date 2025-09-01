@@ -1,0 +1,8 @@
+# execute cd
+cd
+# execute ls
+ls
+# execute a non-existent command
+lol
+# an empty line
+
