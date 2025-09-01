@@ -12,6 +12,9 @@ if len(sys.argv) != 3:
 
 SHESH_VFS_PATH = sys.argv[1]
 SHESHRC_PATH = sys.argv[2]
+if not os.path.isfile(SHESHRC_PATH):
+    print("shesh: no file at specified path for init script")
+    exit(1)
 
 print(f"shesh: starting the VFS (VFS path: \"{SHESH_VFS_PATH}\", init script path: \"{SHESHRC_PATH}\")")
 
