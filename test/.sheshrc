@@ -1,8 +1,47 @@
-# execute cd
-cd
-# execute ls
-ls
+# execute a dummy command to display args
+show_args
 # execute a non-existent command
 lol
 # an empty line
 
+# ls in an empty directory
+ls
+# current working directory
+pwd
+# cd to nowhere
+cd
+pwd
+# create some files
+touch a.txt
+touch b.txt
+# ls with some files
+ls
+# create a directory
+mkdir d
+# ls
+ls
+# move to non-directory
+cd a.txt
+cd abc
+pwd
+# incorrect args
+cd a b c
+# move to directory
+cd d
+pwd
+# create another directory
+mkdir d2
+ls
+# some more nested directories and files
+cd d2
+pwd
+mkdir d3
+touch 1.txt
+touch 2.txt
+touch 3.txt
+mkdir d4
+ls
+# move out
+cd ../../../../../../
+pwd
+ls

@@ -15,6 +15,9 @@ SHESHRC_PATH = sys.argv[2]
 if not os.path.isfile(SHESHRC_PATH):
     print("shesh: no file at specified path for init script")
     exit(1)
+if not os.path.isdir(SHESH_VFS_PATH):
+    print("shesh: no directory at specified path for vfs source")
+    exit(1)
 
 print(f"shesh: starting the VFS (VFS path: \"{SHESH_VFS_PATH}\", init script path: \"{SHESHRC_PATH}\")")
 
@@ -32,9 +35,13 @@ output_field["text"] += "Welcome to shesh, a shell emulator\n"
 BINARIES = {
     "cd": binaries.cd,
     "ls": binaries.ls,
+    "pwd": binaries.pwd,
+    "touch": binaries.touch,
+    "mkdir": binaries.mkdir,
+    "show_args": binaries.show_args
 }
 BUILTINS = ["exit"]
-ENV_VARS = {"PWD": "/"}
+ENV_VARS = {"PWD": "/", "VFS_PATH": SHESH_VFS_PATH}
 
 def parse_args(command_string: str) -> list[str]:
     command_string = command_string.lstrip()
