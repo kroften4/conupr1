@@ -32,16 +32,30 @@ input_field = ttk.Entry()
 output_field = ttk.Label()
 output_field["text"] += "Welcome to shesh, a shell emulator\n"
 
+FILE_SYSTEM = {}
 BINARIES = {
     "cd": binaries.cd,
     "ls": binaries.ls,
     "pwd": binaries.pwd,
-    "touch": binaries.touch,
-    "mkdir": binaries.mkdir,
     "show_args": binaries.show_args
 }
 BUILTINS = ["exit"]
-ENV_VARS = {"PWD": "/", "VFS_PATH": SHESH_VFS_PATH}
+ENV_VARS = {"CWD": "/"}
+
+def deserialize_file_system(path: str) -> dict:
+    if not os.path.isdir(path):
+        raise Exception("not a directory")
+    result: dict = {}
+
+    for entry in os.listdir(path):
+        if os.path.isdir(os.path.join(path, entry)):
+            result[entry] = deserialize_file_system(os.path.join(path, entry))
+        if os.path.isfile(os.path.join(path, entry)):
+            result[entry] = ""
+
+    return result
+
+FILE_SYSTEM = deserialize_file_system(SHESH_VFS_PATH)
 
 def parse_args(command_string: str) -> list[str]:
     command_string = command_string.lstrip()
@@ -80,17 +94,20 @@ def exec_command(command_string: str) -> str | None:
             window.destroy()
     elif command_name in BINARIES:
         binary = BINARIES[command_name]
-        return binary(ENV_VARS, args)
+        return binary(FILE_SYSTEM, ENV_VARS, args)
     else:
         return f"shesh: {args[0]}: command not found\n"
 
-def process_command():
-    command_string = input_field.get()
-    output_field["text"] += f"{LOGIN}@{HOSTNAME} {ENV_VARS["PWD"]}> {command_string}\n"
+def display_command(command_string: str) -> None:
+    output_field["text"] += f"{LOGIN}@{HOSTNAME} {ENV_VARS["CWD"]}> {command_string}\n"
     command_output = exec_command(command_string)
     output_field["text"] += command_output
 
-submit_btn = ttk.Button(text="Enter", command=process_command)
+def process_user_input() -> None:
+    command_string = input_field.get()
+    display_command(command_string)
+
+submit_btn = ttk.Button(text="Enter", command=process_user_input)
 
 output_field.pack()
 input_field.pack()
@@ -100,8 +117,6 @@ for line in open(SHESHRC_PATH, "r").readlines():
     line = line.strip()
     if line == "" or line[0] == "#":
         continue
-    print(f"sheshrc: executing command: \"{line}\"")
-    command_output = exec_command(line)
-    print(command_output, end="")
+    display_command(line)
 
 window.mainloop()

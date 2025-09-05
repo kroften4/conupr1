@@ -1,0 +1,31 @@
+# multilevel cd/ls test
+pwd
+ls
+cd dir0
+pwd
+ls
+cd ..
+pwd
+ls
+cd dir0/dir1
+pwd
+ls
+cd /dir0/dir1/../dir1/dir2_1/../dir2_0
+pwd
+ls
+cd ../../dir1
+pwd
+ls
+
+# tree
+tree
+
+# cal
+cal
+
+# errors test
+cd a b c
+cd 123
+ls a b c
+tree a b c
+cal a b c
