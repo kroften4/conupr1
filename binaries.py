@@ -1,6 +1,7 @@
 import shesh_os
 import cal_utils
 import datetime as dt
+import copy
 
 def pwd(file_system, env_vars, args) -> str:
     if len(args) > 1:
@@ -115,3 +116,51 @@ def cal(file_system, env_vars, args) -> str:
             return f"{args[0]}: argument is not a number\n"
         return cal_utils.multimonth_cal(month_start, year_start, month_number)
     return f"{args[0]}: incorrect number of arguments\n"
+
+def cp(file_system, env_vars, args) -> str:
+    if len(args) != 3:
+        return f"{args[0]}: invalid number of arguments\n"
+    cwd = env_vars["CWD"]
+    source = shesh_os.resolve_path(file_system, cwd, args[1])
+    dest = shesh_os.resolve_path(file_system, cwd, args[2])
+    new_name: str = ""
+    if not shesh_os.exists(file_system, source):
+        return f"{args[0]}: node does not exist\n"
+    if not shesh_os.isdir(file_system, dest):
+        new_name = dest.split("/")[-1]
+        dest = dest.split("/")[:-1]
+        dest = "/" + "/".join(dest)
+        if not shesh_os.isdir(file_system, dest):
+            return f"{args[0]}: invalid path provided for destination\n"
+    else:
+        new_name: str = shesh_os.get_node(file_system, source)["name"]
+
+    source = shesh_os.get_node(file_system, source)
+    dest = shesh_os.get_node(file_system, dest)
+    dest["content"][new_name] = copy.deepcopy(source)
+    return ""
+
+def rm(file_system, env_vars, args) -> str:
+    nodepath: str = ""
+    cwd = env_vars["CWD"]
+    if len(args) == 2:
+        nodepath = shesh_os.resolve_path(file_system, cwd, args[1])
+        if shesh_os.isdir(file_system, nodepath):
+            return f"{args[0]}: provide a `-r` flag to remove a directory\n"
+    elif len(args) == 3:
+        if args[1] != "-r":
+            return f"{args[0]}: unknown argument\n"
+        nodepath = shesh_os.resolve_path(file_system, cwd, args[2])
+    else:
+        return f"{args[0]}: invalid number of arguments\n"
+    if nodepath == "/":
+        return f"{args[0]}: cannot remove root\n"
+    if not shesh_os.exists(file_system, nodepath):
+        return f"{args[0]}: node does not exist\n"
+
+    nodename: str = shesh_os.get_node(file_system, nodepath)["name"]
+    parent_path: str = "/" + "/".join(nodepath[1:].split("/")[:-1])
+    parent = shesh_os.get_node(file_system, parent_path)
+    parent["content"].pop(nodename)
+
+    return ""

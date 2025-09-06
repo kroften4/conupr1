@@ -26,7 +26,7 @@ print(f"shesh: starting the VFS (VFS path: \"{SHESH_VFS_PATH}\", init script pat
 LOGIN = os.getlogin()
 HOSTNAME = socket.gethostname()
 
-FILE_SYSTEM = {"type": "directory", "content": {}}
+FILE_SYSTEM = {"type": "directory", "name": "/", "content": {}}
 BINARIES = {
     "show_args": binaries.show_args,
     "cd": binaries.cd,
@@ -35,7 +35,9 @@ BINARIES = {
     "cat": binaries.cat,
     "head": binaries.head,
     "uniq": binaries.uniq,
-    "cal": binaries.cal
+    "cal": binaries.cal,
+    "cp": binaries.cp,
+    "rm": binaries.rm
 }
 BUILTINS = ["exit"]
 ENV_VARS = {"CWD": "/"}
@@ -43,9 +45,11 @@ ENV_VARS = {"CWD": "/"}
 def xml_to_dict_fs(node: ET.Element) -> dict:
     result: dict = {}
     for child in node:
+        name = child.get("name")
         if child.tag == "directory":
-            result[child.get("name")] = {
-                "type": "directory", "content": xml_to_dict_fs(child)
+            result[name] = {
+                "type": "directory", "name": name,
+                "content": xml_to_dict_fs(child)
             }
         elif child.tag == "file":
             content = child.text or ""
@@ -53,8 +57,8 @@ def xml_to_dict_fs(node: ET.Element) -> dict:
                 content = base64.b64decode(content)
             except:
                 pass
-            result[child.get("name")] = {
-                "type": "file", "content": content
+            result[name] = {
+                "type": "file", "name": name, "content": content
             }
         else:
             raise Exception(f"invalid element tag {child.tag} - "

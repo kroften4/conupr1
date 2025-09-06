@@ -9,11 +9,13 @@ def exists(file_system: dict, path: str) -> bool:
         path = path[:-1]
     cwd: dict = file_system
     for dirname in path.split("/"):
+        if dirname == "":
+            continue
         if dirname not in cwd["content"]:
             return False
-        if cwd[dirname]["type"] == "file":
+        if cwd["content"][dirname]["type"] == "file":
             return True
-        cwd = cwd[dirname]["content"]
+        cwd = cwd["content"][dirname]
     return True
 
 def isfile(file_system: dict, path: str) -> bool:
