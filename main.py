@@ -4,6 +4,7 @@ from tkinter import ttk
 import socket
 import sys
 import xml.etree.ElementTree as ET
+import base64
 
 import binaries
 
@@ -25,20 +26,15 @@ print(f"shesh: starting the VFS (VFS path: \"{SHESH_VFS_PATH}\", init script pat
 LOGIN = os.getlogin()
 HOSTNAME = socket.gethostname()
 
-window = tkinter.Tk()
-window.title(f"VFS - {LOGIN}@{HOSTNAME}")
-
-input_field = ttk.Entry()
-
-output_field = ttk.Label()
-output_field["text"] += "Welcome to shesh, a shell emulator\n"
-
 FILE_SYSTEM = {"type": "directory", "content": {}}
 BINARIES = {
+    "show_args": binaries.show_args,
     "cd": binaries.cd,
     "ls": binaries.ls,
     "pwd": binaries.pwd,
-    "show_args": binaries.show_args,
+    "cat": binaries.cat,
+    "head": binaries.head,
+    "uniq": binaries.uniq,
     "cal": binaries.cal
 }
 BUILTINS = ["exit"]
@@ -48,9 +44,18 @@ def xml_to_dict_fs(node: ET.Element) -> dict:
     result: dict = {}
     for child in node:
         if child.tag == "directory":
-            result[child.get("name")] = {"type": "directory", "content": xml_to_dict_fs(child)}
+            result[child.get("name")] = {
+                "type": "directory", "content": xml_to_dict_fs(child)
+            }
         elif child.tag == "file":
-            result[child.get("name")] = {"type": "file", "content": child.text}
+            content = child.text or ""
+            try:
+                content = base64.b64decode(content)
+            except:
+                pass
+            result[child.get("name")] = {
+                "type": "file", "content": content
+            }
         else:
             raise Exception(f"invalid element tag {child.tag} - "
                 "must be either `directory` or `file`")
@@ -108,26 +113,56 @@ def exec_command(command_string: str) -> str | None:
         return f"shesh: {args[0]}: command not found\n"
 
 def display_command(command_string: str) -> None:
-    output_field["text"] += f"{LOGIN}@{HOSTNAME} {ENV_VARS["CWD"]}> {command_string}\n"
+    add_text(output_widget, f"{LOGIN}@{HOSTNAME} {ENV_VARS["CWD"]}> {command_string}\n")
     command_output = exec_command(command_string)
-    output_field["text"] += command_output
-    if len(output_field["text"].split("\n")) > 40:
-        output_field["text"] = "\n".join(output_field["text"].split("\n")[-40:])
+    add_text(output_widget, command_output)
 
 def process_user_input() -> None:
     command_string = input_field.get()
     display_command(command_string)
 
+def add_text(text_widget, content):
+    # Temporarily enable the widget to modify content
+    text_widget.config(state=tkinter.NORMAL)
+    text_widget.insert(tkinter.END, content)  # Add text at the end
+    text_widget.config(state=tkinter.DISABLED)  # Make it readonly again
+    # Auto-scroll to the bottom
+    text_widget.see(tkinter.END)
+
+window = tkinter.Tk()
+window.title(f"VFS - {LOGIN}@{HOSTNAME}")
+
+input_field = ttk.Entry()
+
+# Create a frame to hold the text widget and scrollbar
+frame = ttk.Frame(window)
+frame.pack(anchor=tkinter.NW)
+
+# Create a vertical scrollbar
+scrollbar = ttk.Scrollbar(frame)
+scrollbar.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+
+# Create the text widget with specified height (in lines)
+output_widget = tkinter.Text(
+    frame, 
+    height=22,
+    width=80,
+    wrap=tkinter.WORD,
+    yscrollcommand=scrollbar.set,
+    state=tkinter.DISABLED,
+    font=("Courier", 14)
+)
+add_text(output_widget, "Welcome to shesh, a shell emulator\n")
+
+# Configure the scrollbar to work with the text widget
+scrollbar.config(command=output_widget.yview)
+
+
 submit_btn = ttk.Button(text="Enter", command=process_user_input)
 
-style = ttk.Style()
-style.configure("Courier.TButton", font=("Courier", 16))
-
-output_field.pack(anchor=tkinter.NW)
-output_field.configure(style="Courier.TButton")
+output_widget.pack(anchor=tkinter.NW, fill=tkinter.BOTH, expand=True)
 input_field.pack(anchor=tkinter.W)
 submit_btn.pack(anchor=tkinter.W)
-
 
 for line in open(SHESHRC_PATH, "r").readlines():
     line = line.strip()

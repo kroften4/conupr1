@@ -33,9 +33,60 @@ def cd(file_system, env_vars, args) -> str:
 def show_args(file_system, env_vars, args) -> str:
     return f"command: {args[0]}; args: {", ".join(args[1:])}\n"
 
-def tree(file_system, env_vars, args) -> str:
-    output: str = ""
-    return output
+def cat(file_system, env_vars, args) -> str:
+    if len(args) != 2:
+        return f"{args[0]}: incorrect number of args\n"
+    file = args[1]
+    if not shesh_os.isfile(
+        file_system,
+        shesh_os.resolve_path(file_system, env_vars["CWD"], file)
+    ):
+        return f"{args[0]}: file does not exist\n"
+    file = shesh_os.get_file_node(file_system, env_vars["CWD"], file)
+    return file["content"].decode()
+
+def head(file_system, env_vars, args) -> str:
+    file: str = ""
+    amount: int = 10
+    if len(args) == 2:
+        file = args[1]
+    elif len(args) == 3:
+        file = args[1]
+        try:
+            amount = int(args[2])
+        except ValueError:
+            return f"{args[0]}: second argument is not an integer\n"
+    else:
+        return f"{args[0]}: incorrect number of args\n"
+    if not shesh_os.isfile(
+        file_system,
+        shesh_os.resolve_path(file_system, env_vars["CWD"], file)
+    ):
+        return f"{args[0]}: file does not exist"
+    if amount <= 0:
+        return f"{args[0]}: amount of lines must be > 0\n"
+    output = shesh_os.get_file_node(
+        file_system, env_vars["CWD"], file
+    )["content"].decode().split("\n")[:amount]
+    return "\n".join(output) + "\n"
+
+def uniq(file_system, env_vars, args) -> str:
+    if len(args) != 2:
+        return f"{args[0]}: incorrect number of args\n"
+    file = args[1]
+    if not shesh_os.isfile(
+        file_system,
+        shesh_os.resolve_path(file_system, env_vars["CWD"], file)
+    ):
+        return f"{args[0]}: file does not exist\n"
+    lines = shesh_os.get_file_node(
+        file_system, env_vars["CWD"], file
+    )["content"].decode().split("\n")
+    output: list[str] = []
+    for line in lines:
+        if line not in output:
+            output.append(line)
+    return "\n".join(output) + "\n"
 
 def cal(file_system, env_vars, args) -> str:
     if len(args) == 1:

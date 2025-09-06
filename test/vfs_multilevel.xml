@@ -1,12 +1,13 @@
 <directory name="root">
-    <file name="file1.txt">hello</file>
-    <file name="file2.json">{"name": "unknown"}</file>
+    <file name="file1.txt">dGhpcyBhc2RmCmlzYXNkZyAKYSBhc2RnCm11bHRpYXNkZmcgCmxpbmVhcyBnCmZpbGUgc2RmZyAKMSAxIDEgCjIgMiAyIDIgCiAzIDMgMyAzIDMKIDQgNCA0IDQgNDQgNCA0CjU1IDU1IDUgIDU1IAo2NiAgNjYgNiA2IDYgNjYgCjc3NyA3NyAKOCA4ODggIDggCiAgOSA5IDk5IAo=</file>
+    <file name="file2.json">ewogICAgIkFsZnJlZG8iOiB7CiAgICAgICAgImluZ3JlZGllbnRzIjogewogICAgICAgICAgICAiQ2hlZXNlIjogMSwKICAgICAgICAgICAgIk1pbGsiOiAxLAogICAgICAgICAgICAiTm9vZGxlcyI6IDEKICAgICAgICB9LAogICAgICAgICJyYXJpdHkiOiAiVGllciAyIgogICAgfSwKICAgICJBbmNob3Z5IFBpenphIjogewogICAgICAgICJpbmdyZWRpZW50cyI6IHsKICAgICAgICAgICAgIkZpc2giOiAxLAogICAgICAgICAgICAiUGl6emEiOiAxCiAgICAgICAgfSwKICAgICAgICAicmFyaXR5IjogIlRpZXIgMyIKICAgIH0sCiAgICAiQXBwbGUgSnVpY2UiOiB7CiAgICAgICAgImluZ3JlZGllbnRzIjogewogICAgICAgICAgICAiQXBwbGUiOiAxLAogICAgICAgICAgICAiU3VnYXIiOiAxLAogICAgICAgICAgICAiV2F0ZXIiOiAxCiAgICAgICAgfSwKICAgICAgICAicmFyaXR5IjogIkV4b3RpYyIKICAgIH0sCiAgICAiQXBwbGUgUGllIjogewogICAgICAgICJpbmdyZWRpZW50cyI6IHsKICAgICAgICAgICAgIkFwcGxlIjogMSwKICAgICAgICAgICAgIlBpZSBDcnVzdCI6IDEKICAgICAgICB9LAogICAgICAgICJyYXJpdHkiOiAiRXhvdGljIgogICAgfSwKICAgICJBc2FkYSBUYWNvIjogewogICAgICAgICJpbmdyZWRpZW50cyI6IHsKICAgICAgICAgICAgIk1lYXQiOiAxLAogICAgICAgICAgICAiT25pb24iOiAxLAogICAgICAgICAgICAiVG9ydGlsbGEiOiAxCiAgICAgICAgfSwKICAgICAgICAicmFyaXR5IjogIlRpZXIgMSIKICAgIH0KfQo=</file>
+    <file name="file3.txt">MTIzNDUKMTIzNDUKMjM0NQoyMzQ1CjM0NQoKMTIzNDUKMjM0NQoKNDUKNDUKMzQ1CjQ1CjIzNDUKCg==</file>
     <directory name="dir">
         <directory name="subdir">
             <directory name="another">
                 <directory name="yet_another"></directory>
                 <directory name="one_more"></directory>
-                <file name="idk.txt">i dont know</file>
+                <file name="idk.txt">idontknow</file>
                 <file name="a.txt">aaaaaaaa</file>
                 <file name="b.txt">bbbb</file>
             </directory>
