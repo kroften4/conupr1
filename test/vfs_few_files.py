@@ -7,9 +7,9 @@ if len(sys.argv) != 2:
 
 root_dir = sys.argv[1]
 
-print(f">> testing \"python {root_dir}/main.py\" {root_dir}/test/vfs_few_files {root_dir}/test/.minimal_sheshrc")
+print(f">> testing \"python {root_dir}/main.py\" {root_dir}/test/vfs_few_files.xml {root_dir}/test/.minimal_sheshrc")
 test2_output = subprocess.check_output(
-    ["python", f"{root_dir}/main.py", f"{root_dir}/test/vfs_few_files",
+    ["python", f"{root_dir}/main.py", f"{root_dir}/test/vfs_few_files.xml",
      f"{root_dir}/test/.minimal_sheshrc"]
 )
 print(test2_output.decode())

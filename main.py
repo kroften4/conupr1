@@ -8,7 +8,7 @@ import xml.etree.ElementTree as ET
 import binaries
 
 if len(sys.argv) != 3:
-    print("shesh: invalid arguments. Usage: shesh \"path/to/vfs\" \"path/to/init/script\" ")
+    print("shesh: invalid arguments. Usage: shesh \"path/to/vfs.xml\" \"path/to/init/script\" ")
     exit(1)
 
 SHESH_VFS_PATH = sys.argv[1]

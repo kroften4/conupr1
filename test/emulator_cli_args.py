@@ -31,8 +31,8 @@ print(test2_output.decode())
 
 print()
 
-print(f">> testing \"python {root_dir}/main.py {root_dir}/test/vfs_minimal {root_dir}/test/.sheshrc\" (correct path)")
+print(f">> testing \"python {root_dir}/main.py {root_dir}/test/vfs_minimal.xml {root_dir}/test/.sheshrc\" (correct path)")
 test2_output = subprocess.check_output(
-    ["python", f"{root_dir}/main.py", f"{root_dir}/test/vfs_minimal", f"{root_dir}/test/.sheshrc"]
+    ["python", f"{root_dir}/main.py", f"{root_dir}/test/vfs_minimal.xml", f"{root_dir}/test/.sheshrc"]
 )
 print(test2_output.decode())

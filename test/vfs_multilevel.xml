@@ -6,7 +6,7 @@
             <directory name="another">
                 <directory name="yet_another"></directory>
                 <directory name="one_more"></directory>
-                <file name="idk.txt">i don't know</file>
+                <file name="idk.txt">i dont know</file>
                 <file name="a.txt">aaaaaaaa</file>
                 <file name="b.txt">bbbb</file>
             </directory>

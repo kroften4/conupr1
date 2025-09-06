@@ -38,18 +38,29 @@ def tree(file_system, env_vars, args) -> str:
     return output
 
 def cal(file_system, env_vars, args) -> str:
-    output = ""
     if len(args) == 1:
         month = dt.datetime.now().month
         year = dt.datetime.now().year
         return cal_utils.month_cal(month, year)
     if len(args) == 2:
-        year = int(args[1])
+        try:
+            year = int(args[1])
+        except ValueError:
+            return f"{args[0]}: argument is not a number\n"
         return cal_utils.multimonth_cal(1, year, 12)
     if len(args) == 3:
-        month = int(args[1])
-        year = int(args[2])
+        try:
+            month = int(args[1])
+            year = int(args[2])
+        except ValueError:
+            return f"{args[0]}: argument is not a number\n"
         return cal_utils.month_cal(month, year)
     if len(args) == 4:
-        return cal_utils.multimonth_cal(int(args[1]), int(args[2]), int(args[3]))
-    return f"{args[0]}: incorrect number of arguments"
+        try:
+            month_start = int(args[1])
+            year_start = int(args[2])
+            month_number = int(args[3])
+        except ValueError:
+            return f"{args[0]}: argument is not a number\n"
+        return cal_utils.multimonth_cal(month_start, year_start, month_number)
+    return f"{args[0]}: incorrect number of arguments\n"
