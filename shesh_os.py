@@ -9,11 +9,11 @@ def exists(file_system: dict, path: str) -> bool:
         path = path[:-1]
     cwd: dict = file_system
     for dirname in path.split("/"):
-        if dirname not in cwd:
+        if dirname not in cwd["content"]:
             return False
-        if type(cwd[dirname]) == str:
+        if cwd[dirname]["type"] == "file":
             return True
-        cwd = cwd[dirname]
+        cwd = cwd[dirname]["content"]
     return True
 
 def isfile(file_system: dict, path: str) -> bool:
@@ -25,12 +25,12 @@ def isfile(file_system: dict, path: str) -> bool:
         path = path[:-1]
     cwd = file_system
     for dirname in path.split("/"):
-        if dirname not in cwd:
+        if dirname not in cwd["content"]:
             return False
-        if type(cwd[dirname]) == str:
+        if cwd[dirname]["type"] == "file":
             return True
-        cwd = cwd[dirname]
-    return type(cwd) == str
+        cwd = cwd[dirname]["content"]
+    return cwd["type"] == "file"
 
 def isabs(path: str) -> bool:
     if path == "":
@@ -48,12 +48,12 @@ def isdir(file_system: dict, path: str) -> bool:
     for dirname in path[1:].split("/"):
         if dirname == "":
             continue
-        if dirname not in cwd:
+        if dirname not in cwd["content"]:
             return False
-        if type(cwd[dirname]) == str:
+        if cwd["content"][dirname]["type"] == "file":
             return False
-        cwd = cwd[dirname]
-    return type(cwd) == dict
+        cwd = cwd["content"][dirname]
+    return cwd["type"] == "directory"
 
 def resolve_path(file_systen: dict, cwd: str, path: str) -> str:
     if not isabs(cwd):
@@ -81,18 +81,18 @@ def get_dir_dict(file_system: dict, dirpath: str) -> dict:
     for dirname in dirpath[1:].split("/"):
         if dirname == "":
             continue
-        if dirname not in cwd:
+        if dirname not in cwd["content"]:
             raise Exception("file does not exist")
-        if type(cwd[dirname]) == str:
+        if cwd["content"][dirname]["type"] == "file":
             raise Exception("not a directory")
-        cwd = cwd[dirname]
-    if type(cwd) == str:
+        cwd = cwd["content"][dirname]
+    if cwd["type"] == "file":
         raise Exception("not a directory")
     return cwd
 
 def listdir(file_system: dict, dirpath: str) -> Generator[str]:
     dir: dict = get_dir_dict(file_system, dirpath)
-    for entry in dir:
+    for entry in dir["content"]:
         yield entry
 
 def join(path1: str, path2: str) -> str:

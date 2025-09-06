@@ -1,4 +1,6 @@
 import shesh_os
+import cal_utils
+import datetime as dt
 
 def pwd(file_system, env_vars, args) -> str:
     if len(args) > 1:
@@ -30,3 +32,24 @@ def cd(file_system, env_vars, args) -> str:
 
 def show_args(file_system, env_vars, args) -> str:
     return f"command: {args[0]}; args: {", ".join(args[1:])}\n"
+
+def tree(file_system, env_vars, args) -> str:
+    output: str = ""
+    return output
+
+def cal(file_system, env_vars, args) -> str:
+    output = ""
+    if len(args) == 1:
+        month = dt.datetime.now().month
+        year = dt.datetime.now().year
+        return cal_utils.month_cal(month, year)
+    if len(args) == 2:
+        year = int(args[1])
+        return cal_utils.multimonth_cal(1, year, 12)
+    if len(args) == 3:
+        month = int(args[1])
+        year = int(args[2])
+        return cal_utils.month_cal(month, year)
+    if len(args) == 4:
+        return cal_utils.multimonth_cal(int(args[1]), int(args[2]), int(args[3]))
+    return f"{args[0]}: incorrect number of arguments"

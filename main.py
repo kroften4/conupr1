@@ -3,6 +3,7 @@ import tkinter
 from tkinter import ttk
 import socket
 import sys
+import xml.etree.ElementTree as ET
 
 import binaries
 
@@ -15,8 +16,8 @@ SHESHRC_PATH = sys.argv[2]
 if not os.path.isfile(SHESHRC_PATH):
     print("shesh: no file at specified path for init script")
     exit(1)
-if not os.path.isdir(SHESH_VFS_PATH):
-    print("shesh: no directory at specified path for vfs source")
+if not os.path.isfile(SHESH_VFS_PATH):
+    print("shesh: no file at specified path for vfs source")
     exit(1)
 
 print(f"shesh: starting the VFS (VFS path: \"{SHESH_VFS_PATH}\", init script path: \"{SHESHRC_PATH}\")")
@@ -32,30 +33,38 @@ input_field = ttk.Entry()
 output_field = ttk.Label()
 output_field["text"] += "Welcome to shesh, a shell emulator\n"
 
-FILE_SYSTEM = {}
+FILE_SYSTEM = {"type": "directory", "content": {}}
 BINARIES = {
     "cd": binaries.cd,
     "ls": binaries.ls,
     "pwd": binaries.pwd,
-    "show_args": binaries.show_args
+    "show_args": binaries.show_args,
+    "cal": binaries.cal
 }
 BUILTINS = ["exit"]
 ENV_VARS = {"CWD": "/"}
 
-def deserialize_file_system(path: str) -> dict:
-    if not os.path.isdir(path):
-        raise Exception("not a directory")
+def xml_to_dict_fs(node: ET.Element) -> dict:
     result: dict = {}
-
-    for entry in os.listdir(path):
-        if os.path.isdir(os.path.join(path, entry)):
-            result[entry] = deserialize_file_system(os.path.join(path, entry))
-        if os.path.isfile(os.path.join(path, entry)):
-            result[entry] = ""
-
+    for child in node:
+        if child.tag == "directory":
+            result[child.get("name")] = {"type": "directory", "content": xml_to_dict_fs(child)}
+        elif child.tag == "file":
+            result[child.get("name")] = {"type": "file", "content": child.text}
+        else:
+            raise Exception(f"invalid element tag {child.tag} - "
+                "must be either `directory` or `file`")
     return result
 
-FILE_SYSTEM = deserialize_file_system(SHESH_VFS_PATH)
+def deserialize_file_system(path: str) -> dict:
+    if not os.path.isfile(path):
+        raise Exception("file does not exist")
+    xml_tree = ET.parse(path)
+    root = xml_tree.getroot()
+    return xml_to_dict_fs(root)
+
+FILE_SYSTEM["content"] = deserialize_file_system(SHESH_VFS_PATH)
+print(FILE_SYSTEM)
 
 def parse_args(command_string: str) -> list[str]:
     command_string = command_string.lstrip()
@@ -102,6 +111,8 @@ def display_command(command_string: str) -> None:
     output_field["text"] += f"{LOGIN}@{HOSTNAME} {ENV_VARS["CWD"]}> {command_string}\n"
     command_output = exec_command(command_string)
     output_field["text"] += command_output
+    if len(output_field["text"].split("\n")) > 40:
+        output_field["text"] = "\n".join(output_field["text"].split("\n")[-40:])
 
 def process_user_input() -> None:
     command_string = input_field.get()
@@ -109,9 +120,14 @@ def process_user_input() -> None:
 
 submit_btn = ttk.Button(text="Enter", command=process_user_input)
 
-output_field.pack()
-input_field.pack()
-submit_btn.pack()
+style = ttk.Style()
+style.configure("Courier.TButton", font=("Courier", 16))
+
+output_field.pack(anchor=tkinter.NW)
+output_field.configure(style="Courier.TButton")
+input_field.pack(anchor=tkinter.W)
+submit_btn.pack(anchor=tkinter.W)
+
 
 for line in open(SHESHRC_PATH, "r").readlines():
     line = line.strip()

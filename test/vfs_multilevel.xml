@@ -1,0 +1,18 @@
+<directory name="root">
+    <file name="file1.txt">hello</file>
+    <file name="file2.json">{"name": "unknown"}</file>
+    <directory name="dir">
+        <directory name="subdir">
+            <directory name="another">
+                <directory name="yet_another"></directory>
+                <directory name="one_more"></directory>
+                <file name="idk.txt">i don't know</file>
+                <file name="a.txt">aaaaaaaa</file>
+                <file name="b.txt">bbbb</file>
+            </directory>
+            <file name="c.txt">oeiuksdl</file>
+        </directory>
+        <file name="d.txt">dddddddddddddd</file>
+        <file name="f.txt">FFFFFFFFFFFffffffff</file>
+    </directory>
+</directory>
