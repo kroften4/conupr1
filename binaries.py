@@ -63,7 +63,7 @@ def head(file_system, env_vars, args) -> str:
         file_system,
         shesh_os.resolve_path(file_system, env_vars["CWD"], file)
     ):
-        return f"{args[0]}: file does not exist"
+        return f"{args[0]}: file does not exist\n"
     if amount <= 0:
         return f"{args[0]}: amount of lines must be > 0\n"
     output = shesh_os.get_file_node(
