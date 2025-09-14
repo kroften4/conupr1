@@ -59,6 +59,7 @@ def exec_command(command_string: str) -> str | None:
     if command_name in BUILTINS:
         if command_name == "exit":
             window.destroy()
+            exit(0)
     elif command_name in BINARIES:
         binary = BINARIES[command_name]
         return binary(ENV_VARS, args)
