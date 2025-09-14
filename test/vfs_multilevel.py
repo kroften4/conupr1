@@ -10,6 +10,6 @@ root_dir = sys.argv[1]
 print(f">> testing \"python {root_dir}/main.py\" {root_dir}/test/vfs_multilevel.xml {root_dir}/test/.sheshrc")
 test2_output = subprocess.check_output(
     ["python", f"{root_dir}/main.py", f"{root_dir}/test/vfs_multilevel.xml",
-     f"{root_dir}/test/.multilevel_sheshrc"]
+     f"{root_dir}/test/.sheshrc"]
 )
 print(test2_output.decode())
