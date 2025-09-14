@@ -1,10 +1,6 @@
-# execute a dummy command to display args
-show_args "argument one" "arg2" "a r g u m e n t 3"
 # execute a non-existent command
-lol
+non existent command
 # an empty line
 
-# ls in an empty directory
-ls
-# cd to nowhere
-cd
+ls a b c
+cd asdf asd fa gwe
