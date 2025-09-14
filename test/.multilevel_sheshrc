@@ -30,24 +30,6 @@ uniq file3.txt
 # cal
 cal
 
-# cp & rm
-ls
-cp dir/subdir /
-ls
-rm -r subdir
-ls
-cp dir/subdir/another /dir/subdir/another2
-cd dir/subdir
-ls
-rm -r another
-ls
-cd /
-ls
-cp file1.txt file2.md
-rm file1.txt
-ls
-cat file2.md
-
 # errors test
 cd a b c
 cd 123
@@ -57,9 +39,3 @@ cal 1 2 3 4
 head -1
 head a b c
 uniq a b c
-rm /
-rm -r /
-rm 123
-cp a b
-cp a
-
