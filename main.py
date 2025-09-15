@@ -49,7 +49,7 @@ def xml_to_dict_fs(node: ET.Element) -> dict:
             try:
                 content = base64.b64decode(content)
             except:
-                pass
+                raise Exception("file content is not base64 encoded")
             result[name] = {
                 "type": "file", "name": name, "content": content
             }
