@@ -24,7 +24,6 @@ print(f"shesh: starting the VFS (VFS path: \"{SHESH_VFS_PATH}\", init script pat
 
 FILE_SYSTEM = {"type": "directory", "name": "/", "content": {}}
 BINARIES = {
-    "show_args": binaries.show_args,
     "cd": binaries.cd,
     "ls": binaries.ls,
     "pwd": binaries.pwd,
@@ -52,7 +51,7 @@ def xml_to_dict_fs(node: ET.Element) -> dict:
             try:
                 content = base64.b64decode(content)
             except:
-                pass
+                raise Exception("content of file is not b64 encoded")
             result[name] = {
                 "type": "file", "name": name, "content": content
             }
@@ -109,7 +108,9 @@ def exec_command(command_string: str) -> str | None:
             exit(0)
     elif command_name in BINARIES:
         binary = BINARIES[command_name]
-        return binary(FILE_SYSTEM, ENV_VARS, args)
+        output = binary(FILE_SYSTEM, ENV_VARS, args)
+        window.title(f"VFS - {ENV_VARS['CWD']}")
+        return output
     else:
         return f"shesh: {args[0]}: command not found\n"
 

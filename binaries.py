@@ -9,10 +9,18 @@ def pwd(file_system, env_vars, args) -> str:
     return env_vars["CWD"] + "\n"
 
 def ls(file_system, env_vars, args) -> str:
-    if len(args) > 1:
+    if len(args) == 1:
+        curr_dir = env_vars["CWD"]
+    elif len(args) == 2:
+        curr_dir = shesh_os.resolve_path(file_system, env_vars["CWD"], args[1])
+    else:
         return f"{args[0]}: too many args\n"
+    if not shesh_os.isdir(file_system, curr_dir):
+        if shesh_os.isfile(file_system, curr_dir):
+            return curr_dir.split("/")[-1] + "\n"
+        else:
+            return f"{args[0]}: no such file or directory\n"
     output: list[str] = []
-    curr_dir = env_vars["CWD"]
     for entry in shesh_os.listdir(file_system, curr_dir):
         if shesh_os.isdir(file_system, shesh_os.join(curr_dir, entry)):
             entry += "/"

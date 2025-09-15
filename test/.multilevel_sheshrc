@@ -1,6 +1,8 @@
 # multilevel cd/ls test
 pwd
 ls
+ls dir
+ls dir/subdir
 cd dir
 pwd
 ls
