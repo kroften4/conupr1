@@ -1,5 +1,5 @@
 <directory name="root">
-    <file name="a.txt">aaaAAAaaa</file>
-    <file name="b.txt">bbbbbbbbb</file>
-    <file name="c.txt">ccccccccc</file>
+    <file name="a.txt">aGVsbG8gd29ybGQK</file>
+    <file name="b.txt">Z29vZGJ5ZSB3b3JsZAoK</file>
+    <file name="c.txt">Y29naXRvIGVyZ28gc3VtCg==</file>
 </directory>
