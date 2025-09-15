@@ -44,7 +44,7 @@ def xml_to_dict_fs(node: ET.Element) -> dict:
             try:
                 content = base64.b64decode(content)
             except:
-                pass
+                raise Exception("file content is not base64 encoded")
             result[name] = {
                 "type": "file", "name": name, "content": content
             }
@@ -101,7 +101,9 @@ def exec_command(command_string: str) -> str | None:
             exit(0)
     elif command_name in BINARIES:
         binary = BINARIES[command_name]
-        return binary(FILE_SYSTEM, ENV_VARS, args)
+        output = binary(FILE_SYSTEM, ENV_VARS, args)
+        window.title(f"VFS - {ENV_VARS["CWD"]}")
+        return output
     else:
         return f"shesh: {args[0]}: command not found\n"
 
@@ -121,7 +123,7 @@ def add_text(text_widget, content):
     text_widget.see(tkinter.END)
 
 window = tkinter.Tk()
-window.title(f"VFS")
+window.title(f"VFS - {ENV_VARS["CWD"]}")
 
 input_field = ttk.Entry()
 

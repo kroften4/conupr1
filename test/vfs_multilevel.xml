@@ -7,13 +7,13 @@
             <directory name="another">
                 <directory name="yet_another"></directory>
                 <directory name="one_more"></directory>
-                <file name="idk.txt">idontknow</file>
-                <file name="a.txt">aaaaaaaa</file>
-                <file name="b.txt">bbbb</file>
+                <file name="idk.txt">aGkK</file>
+                <file name="a.txt">aGkK</file>
+                <file name="b.txt">aGkK</file>
             </directory>
-            <file name="c.txt">oeiuksdl</file>
+            <file name="c.txt">aGkK</file>
         </directory>
-        <file name="d.txt">dddddddddddddd</file>
-        <file name="f.txt">FFFFFFFFFFFffffffff</file>
+        <file name="d.txt">aGkK</file>
+        <file name="f.txt">aGkK</file>
     </directory>
 </directory>
