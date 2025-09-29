@@ -109,7 +109,8 @@ def exec_command(command_string: str) -> str | None:
     elif command_name in BINARIES:
         binary = BINARIES[command_name]
         output = binary(FILE_SYSTEM, ENV_VARS, args)
-        window.title(f"VFS - {ENV_VARS['CWD']}")
+        window.title(f"VFS - {os.path.abspath(SHESH_VFS_PATH)} - {ENV_VARS["CWD"]}")
+
         return output
     else:
         return f"shesh: {args[0]}: command not found\n"
